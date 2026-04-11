@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Power.Weather.Test.ApiModules.Config;
+using Power.Weather.Test.Application;
+using Power.Weather.Test.Components.Models;
 using System.Reflection;
 
 namespace Power.Weather.Test.ApiModules;
@@ -11,6 +12,7 @@ public static class DependencyInjection
     public static IServiceCollection AddApiModulesConfiguration(this IServiceCollection services, IConfigurationRoot config)
     {
         BindConfigOptions(services, config);
+        services.AddApplicationConfiguration(config);
         return services;
     }
 

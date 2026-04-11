@@ -2,6 +2,7 @@ using Power.Weather.Test.ApiModules;
 using Power.Weather.Test.Application;
 using Power.Weather.Test.Application.Constants;
 using Power.Weather.Test.Application.ModelBinding;
+using Power.Weather.Test.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,6 @@ var configurationBuilder = new ConfigurationBuilder()
 
 var config = configurationBuilder.Build();
 
-builder.Services.AddApplicationConfiguration(config);
 builder.Services.AddApiModulesConfiguration(config);
 
 builder.Services

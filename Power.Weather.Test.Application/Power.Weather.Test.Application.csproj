@@ -21,4 +21,8 @@
     <Folder Include="Constants\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Power.Weather.Test.Components\Power.Weather.Test.Components.csproj" />
+  </ItemGroup>
+
 </Project>

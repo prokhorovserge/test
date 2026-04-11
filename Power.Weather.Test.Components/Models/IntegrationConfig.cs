@@ -1,4 +1,4 @@
-﻿namespace Power.Weather.Test.ApiModules.Config;
+﻿namespace Power.Weather.Test.Components.Models;
 
 public class IntegrationConfig
 {
