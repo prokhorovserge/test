@@ -1,14 +1,45 @@
+using Power.Weather.Test.ApiModules;
+using Power.Weather.Test.Application;
+using Power.Weather.Test.Application.Constants;
+using Power.Weather.Test.Application.ModelBinding;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+var configurationBuilder = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", false)
+    //.AddJsonFile($"appsettings.{environment}.json", false)
+    .AddEnvironmentVariables();
 
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+var config = configurationBuilder.Build();
+
+builder.Services.AddApplicationConfiguration(config);
+builder.Services.AddApiModulesConfiguration(config);
+
+builder.Services
+    .AddControllers(options =>
+    {
+        //options.Filters.Add<ApiExceptionFilterAttribute>();
+        options.ModelBinderProviders.Insert(0, new KebabCaseEnumModelBinderProvider());
+    })
+    .AddControllers();
+
+builder.Services.AddHttpClient();
+
+builder.Services.AddHttpClient(HttpClientConstants.DisableAutoRedirect)
+    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+    {
+        AllowAutoRedirect = false // Disable automatic redirection
+    });
+builder.Services.AddHttpClient(HttpClientConstants.AllowAutoRedirect)
+    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+    {
+        AllowAutoRedirect = true // Enable automatic redirection
+    });
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
