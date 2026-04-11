@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Power.Weather.Test.Components.Models;
 
 namespace Power.Weather.Test.WebAPI.Controllers
 {

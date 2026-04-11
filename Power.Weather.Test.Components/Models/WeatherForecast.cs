@@ -1,4 +1,4 @@
-namespace Power.Weather.Test.WebAPI
+namespace Power.Weather.Test.Components.Models
 {
     public class WeatherForecast
     {
