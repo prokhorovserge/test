@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Power.Weather.Test.ApiModules/Power.Weather.Test.ApiModules.csproj" />
+  <Project Path="Power.Weather.Test.Components/Power.Weather.Test.Components.csproj" />
+  <Project Path="Power.Weather.Test.WebAPI/Power.Weather.Test.WebAPI.csproj" />
+</Solution>

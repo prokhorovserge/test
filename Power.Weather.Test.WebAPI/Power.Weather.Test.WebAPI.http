@@ -1,0 +1,6 @@
+@Power.Weather.Test.WebAPI_HostAddress = http://localhost:5010
+
+GET {{Power.Weather.Test.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
