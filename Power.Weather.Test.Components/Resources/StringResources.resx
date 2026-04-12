@@ -120,4 +120,7 @@
   <data name="WeatherApiError" xml:space="preserve">
     <value>Weather API call error</value>
   </data>
+  <data name="WeatherJsonError" xml:space="preserve">
+    <value>Can not get weather data</value>
+  </data>
 </root>

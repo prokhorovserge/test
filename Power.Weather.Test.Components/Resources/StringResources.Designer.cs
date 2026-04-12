@@ -68,5 +68,14 @@ namespace Power.Weather.Test.Components.Resources {
                 return ResourceManager.GetString("WeatherApiError", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can not get weather data.
+        /// </summary>
+        internal static string WeatherJsonError {
+            get {
+                return ResourceManager.GetString("WeatherJsonError", resourceCulture);
+            }
+        }
     }
 }

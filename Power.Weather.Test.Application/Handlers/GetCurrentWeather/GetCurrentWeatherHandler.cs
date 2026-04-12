@@ -1,25 +1,30 @@
 ﻿using Power.Weather.Test.Application.Events;
-using Power.Weather.Test.Components.Services;
+using Power.Weather.Test.Components.Contracts;
+using Power.Weather.Test.Components.Models;
 
-namespace Power.Weather.Test.Application.Handlers.GetCurrentWeather
+namespace Power.Weather.Test.Application.Handlers.GetCurrentWeather;
+
+public class GetCurrentWeatherHandler: BaseEventHandler<GetCurrentWeatherQuery, GetCurrentWeatherResult>
 {
-    public class GetCurrentWeatherHandler: BaseEventHandler<GetCurrentWeatherQuery, GetCurrentWeatherResult>
+    private readonly IWeatherDataService _weatherDataService;
+
+    public GetCurrentWeatherHandler(IWeatherDataService weatherDataService)
     {
-        private readonly WeatherDataService _weatherDataService;
+        _weatherDataService = weatherDataService;
+    }
 
-        public GetCurrentWeatherHandler(WeatherDataService weatherDataService)
+    public override async Task<GetCurrentWeatherResult> Handle(GetCurrentWeatherQuery request, CancellationToken cancellationToken)
+    {
+        var weatherData = await _weatherDataService.GetCurrentWeatherAsync(
+            new WeatherParam {
+                Latitude = request.Latitude,
+                Longitude = request.Longitude
+            },
+            cancellationToken);
+        var result = new GetCurrentWeatherResult
         {
-            _weatherDataService = weatherDataService;
-        }
-
-        public override async Task<GetCurrentWeatherResult> Handle(GetCurrentWeatherQuery request, CancellationToken cancellationToken)
-        {
-            var weatherData = await _weatherDataService.GetCurrentWeatherAsync(cancellationToken);
-            var result = new GetCurrentWeatherResult
-            {
-                Weather = weatherData
-            };
-            return result;
-        }
+            Weather = weatherData
+        };
+        return result;
     }
 }

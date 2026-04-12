@@ -2,5 +2,6 @@
   <Project Path="Power.Weather.Test.ApiModules/Power.Weather.Test.ApiModules.csproj" />
   <Project Path="Power.Weather.Test.Application/Power.Weather.Test.Application.csproj" Id="3e6064b6-3798-45bc-b6a1-2d3f24f10c13" />
   <Project Path="Power.Weather.Test.Components/Power.Weather.Test.Components.csproj" />
+  <Project Path="Power.Weather.Test.Tests/Power.Weather.Test.Tests.csproj" Id="c99dfab8-6d64-4b51-b0db-9940586b1d68" />
   <Project Path="Power.Weather.Test.WebAPI/Power.Weather.Test.WebAPI.csproj" />
 </Solution>

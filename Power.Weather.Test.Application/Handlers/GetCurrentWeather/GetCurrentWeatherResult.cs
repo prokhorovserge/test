@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Power.Weather.Test.Components.Models;
 
-namespace Power.Weather.Test.Application.Handlers.GetCurrentWeather
+namespace Power.Weather.Test.Application.Handlers.GetCurrentWeather;
+
+public class GetCurrentWeatherResult
 {
-    public class GetCurrentWeatherResult
-    {
-        [JsonProperty(Required = Required.Always)]
-        public CurrentWeather Weather { get; set; } = null!;
-    }
+    [JsonProperty(Required = Required.Always)]
+    public WeatherItem Weather { get; set; } = null!;
 }

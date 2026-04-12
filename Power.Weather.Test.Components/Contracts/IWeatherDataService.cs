@@ -1,11 +1,9 @@
 ﻿using Power.Weather.Test.Components.Models;
-using Power.Weather.Test.Components.Services;
 
-namespace Power.Weather.Test.Components.Contracts
+namespace Power.Weather.Test.Components.Contracts;
+
+public interface IWeatherDataService
 {
-    interface IWeatherDataService
-    {
-        Task<CurrentWeather> GetCurrentWeatherAsync(CancellationToken cancellationToken);
-        Task<WeatherForecast> GetWeatherForecastAsync(WeatherForecastParam param, CancellationToken cancellationToken);
-    }
+    Task<WeatherItem> GetCurrentWeatherAsync(IWeatherParam param, CancellationToken cancellationToken);
+    Task<WeatherForecast> GetWeatherForecastAsync(IWeatherForecastParam param, CancellationToken cancellationToken);
 }
