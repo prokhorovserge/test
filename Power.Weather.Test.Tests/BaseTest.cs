@@ -2,20 +2,19 @@
 using Microsoft.Extensions.DependencyInjection;
 using Power.Weather.Test.Application;
 
-namespace Power.Weather.Test.Tests
+namespace Power.Weather.Test.Tests;
+
+public abstract class BaseTest
 {
-    internal class BaseTest
+    private static readonly IServiceCollection _serviceCollection;
+
+    static BaseTest()
     {
-        private static readonly IServiceCollection _serviceCollection;
+        var config = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", optional: true)
+            .Build();
 
-        static BaseTest()
-        {
-            var config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", optional: true)
-                .Build();
-
-            _serviceCollection = new ServiceCollection();
-            _serviceCollection.AddApplicationConfiguration(config);
-        }
+        _serviceCollection = new ServiceCollection();
+        _serviceCollection.AddApplicationConfiguration(config);
     }
 }

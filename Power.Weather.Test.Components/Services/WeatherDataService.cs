@@ -5,7 +5,6 @@ using Power.Weather.Test.Application.Constants;
 using Power.Weather.Test.Components.Contracts;
 using Power.Weather.Test.Components.Models;
 using Power.Weather.Test.Components.Resources;
-using System.Timers;
 
 namespace Power.Weather.Test.Components.Services;
 

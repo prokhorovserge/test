@@ -1,7 +1,6 @@
-﻿namespace Power.Weather.Test.Components.Contracts
+﻿namespace Power.Weather.Test.Components.Contracts;
+
+public interface IWeatherForecastParam: IWeatherParam
 {
-    public interface IWeatherForecastParam: IWeatherParam
-    {
-        public int Days { get; set; }
-    }
+    public int Days { get; set; }
 }
