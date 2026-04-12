@@ -2,12 +2,12 @@ using Newtonsoft.Json;
 
 namespace Power.Weather.Test.Components.Models
 {
-    public class WeatherForecast
+    public class WeatherForecastDay
     {
         [JsonProperty(Required = Required.Always)]
-        public WeatherItem Current { get; set; } = null!;
+        public string Date { get; set; } = string.Empty;
 
         [JsonProperty(Required = Required.Always)]
-        public WeatherForecastDay[] Days { get; set; } = null!;
+        public WeatherItem[] Hours { get; set; } = null!;
     }
 }

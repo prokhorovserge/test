@@ -8,6 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="TestData\WeatherCurrent.json" />
+    <None Remove="TestData\WeatherForecast.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="TestData\WeatherCurrent.json" />
+    <EmbeddedResource Include="TestData\WeatherForecast.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoFixture" Version="5.0.0-preview0012" />
     <PackageReference Include="coverlet.collector" Version="6.0.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />

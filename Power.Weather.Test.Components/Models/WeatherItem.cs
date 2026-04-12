@@ -8,7 +8,7 @@ namespace Power.Weather.Test.Components.Models
         public string Date { get; set; } = string.Empty; // last_updated / time
 
         [JsonProperty(Required = Required.Always)]
-        public int Temperature { get; set; } // temp_c
+        public double Temperature { get; set; } // temp_c
 
         [JsonProperty(Required = Required.Always)]
         public string Condition { get; set; } = string.Empty; // condition.text
@@ -26,6 +26,6 @@ namespace Power.Weather.Test.Components.Models
         public double Humidity { get; set; } //humidity
 
         [JsonProperty(Required = Required.Always)]
-        public double Cloudy { get; set; } //cloud
+        public double Cloud { get; set; } //cloud
     }
 }

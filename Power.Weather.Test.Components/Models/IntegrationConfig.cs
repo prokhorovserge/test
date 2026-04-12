@@ -2,7 +2,7 @@
 
 public class IntegrationConfig
 {
-    public string CurrentWeatherApi { get; set; } = null!;
+    public string WeatherApiAddress { get; set; } = null!;
 
-    public string WeatherForecastApi { get; set; } = null!;
+    public string WeatherApiKey { get; set; } = null!;
 }
