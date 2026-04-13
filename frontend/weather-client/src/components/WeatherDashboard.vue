@@ -1,12 +1,10 @@
 <template>
   <div>
-      <!--
       <div v-if="hasError">
         <h3>Произошла ошибка при загрузке данных о погоде.</h3>
         <input type="button" value="Повторить запрос" @click="getData" />
       </div>
-      -->
-      <div class="container">
+      <div v-else class="container">
         <h1>Прогноз погоды</h1>
         <h2>для {{ location?.name }}</h2>
         <h3>Текущий {{ current?.date }} <img :src="current?.conditionIcon" class="condition" /></h3>
@@ -48,7 +46,7 @@ import { useWeatherApi } from './useWeatherApi'
 const {
     getForecast,
     // forecastLoading,
-    // forecastError,
+    forecastError,
     forecastData,
 } = useWeatherApi()
 
@@ -97,7 +95,7 @@ const hours = computed(() => {
     return res
 })
 
-// const hasError = computed(() => forecastError.value !== null)
+const hasError = computed(() => forecastError.value !== null)
 </script>
 
 <style scoped>
