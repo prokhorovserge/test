@@ -11,7 +11,7 @@
     </div>
 
     <h3>Почасовой</h3>
-    <div v-for="(hour, index) in forecastData?.weather.days[0].hours" :key="index">
+    <div v-for="(hour, index) in hours" :key="index">
       <h4 class="hour">{{ hour.date }} <img :src="hour.conditionIcon" class="condition" /></h4>
       <div class="grid">
         <div class="label">Температура:</div><div class="value">{{ hour.temperature }}°C</div>
@@ -33,7 +33,8 @@
   </div>
 </template>
 
-<script setup lang="ts">import { computed } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
 import { useWeatherApi } from './useWeatherApi'
 
 const {
@@ -56,6 +57,36 @@ const getData = () => getForecast(forecastParams)
 
 getData()
 const current = computed(() => forecastData.value?.weather.current)
+
+const hours = computed(() => {
+    const now = Date.now();
+    const today = (forecastData.value?.weather.days[0].hours ?? [])
+        .map(item => {
+            return {
+                date: item.date,
+                temperature: item.temperature,
+                condition: item.condition,
+                conditionIcon: item.conditionIcon,
+                windSpeed: item.windSpeed,
+                pressure: item.pressure
+            }
+        }).filter(item => Date.parse(item.date) > now)
+    const tomorrow = (forecastData.value?.weather.days[1].hours ?? [])
+        .map(item => {
+            return {
+                date: item.date,
+                temperature: item.temperature,
+                condition: item.condition,
+                conditionIcon: item.conditionIcon,
+                windSpeed: item.windSpeed,
+                pressure: item.pressure
+            }
+        })
+    const res = [...today, ...tomorrow]
+    return res
+})
+
+
 </script>
 
 <style scoped>

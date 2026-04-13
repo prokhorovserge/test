@@ -36,7 +36,6 @@ export const useWeatherApi = () => {
             params: param
         }).then(response => {
                 forecastData.value = response.data
-                console.log('getForecast', forecastData.value)
                 forecastLoading.value = false
                 forecastError.value = null
                 return response.data
