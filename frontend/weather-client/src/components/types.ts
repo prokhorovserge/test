@@ -11,6 +11,12 @@ export type WeatherItem = {
 
 export type WeatherForecastDay = {
     date: string
+    temperature: number
+    condition: string
+    conditionIcon: string
+    windSpeed: number
+    pressure: number
+    humidity: number
     hours: WeatherItem[]
 }
 
@@ -31,6 +37,7 @@ export type GetCurrentWeatherResult = {
 export type GetWeatherForecastQuery = {
     latitude: number
     longitude: number
+    days: number
 }
 
 export type GetWeatherForecastResult = {

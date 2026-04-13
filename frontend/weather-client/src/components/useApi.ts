@@ -1,4 +1,4 @@
-import { Ref, ref } from 'vue'
+import { ref } from 'vue'
 import axios, { InternalAxiosRequestConfig } from 'axios'
 import { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
 

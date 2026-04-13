@@ -1,45 +1,44 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
+    <h1>Прогноз погоды</h1>
+    <h2>для {{ latitude }}, {{ longitude }}</h2>
+    <h3>Текущий</h3>
+    <!--
     <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
+      <li><span class="label">Температура:</span> {{ current.value.temperature }}°C</li>
+      <li><span class="label">Состояние:</span> {{ current.value.condition }} <img :src="current.value.conditionIcon" /></li>
     </ul>
-    <h3>Essential Links</h3>
+    <h3>Прогноз на {{ days }} дня</h3>
     <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
+      <li><span class="label">Температура:</span> {{ data.value?.weather.days[0].temperature }}°C</li>
+      <li><span class="label">Состояние:</span> {{ data.value?.weather.days[0].condition }} <img :src="data.value?.weather.days[0].conditionIcon" /></li>
     </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    -->
   </div>
 </template>
 
-<script>
-export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useWeatherApi } from './useWeatherApi'
+// import { GetCurrentWeatherQuery, GetCurrentWeatherResult, GetWeatherForecastQuery, GetWeatherForecastResult } from './types'
+import { GetWeatherForecastResult } from './types'
+
+// const { getForecast, loading, error } = useWeatherApi()
+const { getForecast } = useWeatherApi()
+
+const latitude = 37.6235989
+const longitude = 37.6235989
+const days= 3
+const forecastParams = {
+    latitude,
+    longitude,
+    days
 }
+
+const data = computed(() => getForecast<GetWeatherForecastResult>(forecastParams))
+// const current = computed(() => data.value?.weather.current.temperature)
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h3 {
   margin: 40px 0 0;
@@ -54,5 +53,8 @@ li {
 }
 a {
   color: #42b983;
+}
+.label {
+  font-weight: bold;
 }
 </style>
