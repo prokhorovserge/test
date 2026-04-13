@@ -27,7 +27,7 @@ public class WeatherDataService : IWeatherDataService
 
         try
         {
-            var url = $"{_weatherApiAddress}?key={_weatherApiKey}&q={param.Latitude.ToString("0.0000000")},{param.Longitude.ToString("0.0000000")}";
+            var url = $"{_weatherApiAddress}current.json?key={_weatherApiKey}&q={param.Latitude.ToString("0.0000000")},{param.Longitude.ToString("0.0000000")}";
             using var response = await client.GetAsync(url, cancellationToken);
             if (response.IsSuccessStatusCode)
             {
@@ -54,7 +54,7 @@ public class WeatherDataService : IWeatherDataService
 
         try
         {
-            var url = $"{_weatherApiAddress}?key={_weatherApiKey}&q={param.Latitude.ToString("0.0000000")},{param.Longitude.ToString("0.0000000")}&days={param.Days}";
+            var url = $"{_weatherApiAddress}forecast.json?key={_weatherApiKey}&q={param.Latitude.ToString("0.0000000")},{param.Longitude.ToString("0.0000000")}&days={param.Days}";
             using var response = await client.GetAsync(url, cancellationToken);
             if (response.IsSuccessStatusCode)
             {
@@ -110,10 +110,42 @@ public class WeatherDataService : IWeatherDataService
                 Condition = condition["text"]?.ToString() ?? throw new Exception(StringResources.WeatherJsonError),
                 ConditionIcon = condition["icon"]?.ToString() ?? throw new Exception(StringResources.WeatherJsonError),
                 WindSpeed = json["wind_kph"]?.ToObject<double>() ?? throw new Exception(StringResources.WeatherJsonError),
-                Pressure = json["pressure_mb"]?.ToObject<double>() ?? throw new Exception(StringResources.WeatherJsonError),
+                Pressure = json["precip_mm"]?.ToObject<double>() ?? throw new Exception(StringResources.WeatherJsonError),
                 Humidity = json["humidity"]?.ToObject<double>() ?? throw new Exception(StringResources.WeatherJsonError),
-                Cloud = json["cloud"]?.ToObject<double>() ?? throw new Exception(StringResources.WeatherJsonError)
             };
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(StringResources.WeatherApiError, ex);
+        }
+    }
+    public static WeatherForecastDay GetForecastDay(JToken json)
+    {
+        try
+        {
+            var day = json["day"] ?? throw new Exception(StringResources.WeatherJsonError);
+            var condition = day["condition"] ?? throw new Exception(StringResources.WeatherJsonError);
+            var result = new WeatherForecastDay
+            {
+                Date = json["date"]?.ToString() ?? throw new Exception(StringResources.WeatherJsonError),
+                Temperature = day["avgtemp_c"]?.ToObject<double>() ?? throw new Exception(StringResources.WeatherJsonError),
+                Condition = condition["text"]?.ToString() ?? throw new Exception(StringResources.WeatherJsonError),
+                ConditionIcon = condition["icon"]?.ToString() ?? throw new Exception(StringResources.WeatherJsonError),
+                WindSpeed = day["maxwind_kph"]?.ToObject<double>() ?? throw new Exception(StringResources.WeatherJsonError),
+                Pressure = day["totalprecip_mm"]?.ToObject<double>() ?? throw new Exception(StringResources.WeatherJsonError),
+                Humidity = day["avghumidity"]?.ToObject<double>() ?? throw new Exception(StringResources.WeatherJsonError),
+            };
+
+            var dayHours = new List<WeatherItem>();
+            var hours = json["hour"] ?? throw new Exception(StringResources.WeatherJsonError);
+            foreach (var hour in hours)
+            {
+                var weatherItem = GetWeatherItem(hour);
+                dayHours.Add(weatherItem);
+            }
+            result.Hours = [.. dayHours];
+            
+            return result;
         }
         catch (Exception ex)
         {
@@ -130,19 +162,7 @@ public class WeatherDataService : IWeatherDataService
             var forecastDays = forecast["forecastday"] ?? throw new Exception(StringResources.WeatherJsonError);
             foreach (var forecastDay in forecastDays)
             {
-                var day = new WeatherForecastDay
-                {
-                    Date = forecastDay["date"]?.ToString() ?? throw new Exception(StringResources.WeatherJsonError),
-                };
-                var dayHours = new List<WeatherItem>();
-                var hours = forecastDay["hour"] ?? throw new Exception(StringResources.WeatherJsonError);
-                foreach (var hour in hours)
-                {
-                    var weatherItem = GetWeatherItem(hour);
-                    dayHours.Add(weatherItem);
-                }
-                day.Hours = [.. dayHours];
-                result.Add(day);
+                result.Add(GetForecastDay(forecastDay));
             }
         }
         catch (Exception ex)

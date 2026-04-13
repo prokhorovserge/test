@@ -27,7 +27,6 @@ public class GetWeatherForecastHandlerTests: BaseTest
             WindSpeed = 10.0,
             Pressure = 1013.0,
             Humidity = 50,
-            Cloud = 10
         };
         _weatherForecast = new WeatherForecast
         {
@@ -81,7 +80,6 @@ public class GetWeatherForecastHandlerTests: BaseTest
         Assert.Equal(_weatherItem.WindSpeed, current.WindSpeed);
         Assert.Equal(_weatherItem.Pressure, current.Pressure);
         Assert.Equal(_weatherItem.Humidity, current.Humidity);
-        Assert.Equal(_weatherItem.Cloud, current.Cloud);
 
         _serviceMock.Verify(x => x.GetWeatherForecastAsync(It.Is<IWeatherForecastParam>(p => p.Latitude == expectedLat && p.Longitude == expectedLon && p.Days == expectedDays),
             It.IsAny<CancellationToken>()), Times.Once);

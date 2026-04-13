@@ -25,7 +25,6 @@ public class GetCurrentWeatherHandlerTests: BaseTest
             WindSpeed = 10.0,
             Pressure = 1013.0,
             Humidity = 50,
-            Cloud = 10
         };
         _query = new GetCurrentWeatherQuery
         {
@@ -55,7 +54,6 @@ public class GetCurrentWeatherHandlerTests: BaseTest
         Assert.Equal(_weatherItem.WindSpeed, result.Weather.WindSpeed);
         Assert.Equal(_weatherItem.Pressure, result.Weather.Pressure);
         Assert.Equal(_weatherItem.Humidity, result.Weather.Humidity);
-        Assert.Equal(_weatherItem.Cloud, result.Weather.Cloud);
 
         _serviceMock.Verify(x => x.GetCurrentWeatherAsync(It.Is<IWeatherParam>(p => p.Latitude == expectedLat && p.Longitude == expectedLon),
             It.IsAny<CancellationToken>()), Times.Once);

@@ -18,7 +18,7 @@ public class WeatherDataServiceTest: BaseTest
     {
         var integrationConfig = new IntegrationConfig
         {
-            WeatherApiAddress = "http://api.weatherapi.com/v1/current.json",
+            WeatherApiAddress = "http://api.weatherapi.com/v1/",
             WeatherApiKey = "abcdef",
         };
 
@@ -47,9 +47,8 @@ public class WeatherDataServiceTest: BaseTest
         Assert.Equal("Partly cloudy", result.Condition);
         Assert.Equal("//cdn.weatherapi.com/weather/64x64/day/116.png", result.ConditionIcon);
         Assert.Equal(24.8, Math.Round(result.WindSpeed, 1));
-        Assert.Equal(1012.0, Math.Round(result.Pressure, 1));
+        Assert.Equal(0.03, Math.Round(result.Pressure, 2));
         Assert.Equal(87, Math.Round(result.Humidity, 1));
-        Assert.Equal(75, Math.Round(result.Cloud, 1));
     }
 
     [Fact]
@@ -66,6 +65,7 @@ public class WeatherDataServiceTest: BaseTest
 
         var result = await _weatherDataService.GetWeatherForecastAsync(param, CancellationToken.None);
         Assert.NotNull(result);
+
         var current = result.Current;
         Assert.NotNull(current);
         Assert.Equal("2026-04-10 17:30", current.Date);
@@ -73,17 +73,27 @@ public class WeatherDataServiceTest: BaseTest
         Assert.Equal("Partly cloudy", current.Condition);
         Assert.Equal("//cdn.weatherapi.com/weather/64x64/day/116.png", current.ConditionIcon);
         Assert.Equal(24.8, Math.Round(current.WindSpeed, 1));
-        Assert.Equal(1012.0, Math.Round(current.Pressure, 1));
+        Assert.Equal(0.03, Math.Round(current.Pressure, 2));
         Assert.Equal(87, Math.Round(current.Humidity, 1));
-        Assert.Equal(75, Math.Round(current.Cloud, 1));
+
         var days = result.Days;
         Assert.NotNull(days);
         Assert.Equal(3, days.Length);
+
         var day = days[0];
         Assert.NotNull(day);
+        Assert.Equal("2026-04-10", day.Date);
+        Assert.Equal(1.6, Math.Round(day.Temperature, 1));
+        Assert.Equal("Patchy rain nearby", day.Condition);
+        Assert.Equal("//cdn.weatherapi.com/weather/64x64/day/176.png", day.ConditionIcon);
+        Assert.Equal(26.6, Math.Round(day.WindSpeed, 1));
+        Assert.Equal(1.55, Math.Round(day.Pressure, 2));
+        Assert.Equal(80, Math.Round(day.Humidity, 1));
+
         var hours = day.Hours;
         Assert.NotNull(hours);
         Assert.Equal(24, hours.Length);
+
         var hour = hours[0];
         Assert.NotNull(hour);
         Assert.Equal("2026-04-10 00:00", hour.Date);
@@ -91,9 +101,8 @@ public class WeatherDataServiceTest: BaseTest
         Assert.Equal("Overcast", hour.Condition);
         Assert.Equal("//cdn.weatherapi.com/weather/64x64/night/122.png", hour.ConditionIcon);
         Assert.Equal(23.0, Math.Round(hour.WindSpeed, 1));
-        Assert.Equal(1015.0, Math.Round(hour.Pressure, 1));
+        Assert.Equal(0.00, Math.Round(hour.Pressure, 2));
         Assert.Equal(72, Math.Round(hour.Humidity, 1));
-        Assert.Equal(90, Math.Round(hour.Cloud, 1));
     }
 
     private string GetWeatherJson(string fileName)
