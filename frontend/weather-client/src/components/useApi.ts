@@ -18,7 +18,6 @@ export const useApi = () => {
 
     const axiosInstance: AxiosInstance = axios.create(config)
 
-    /*
     const onRequestFulfilled = (config: InternalAxiosRequestConfig) => {
         loading.value = true
         error.value = null
@@ -45,7 +44,6 @@ export const useApi = () => {
 
     axiosInstance.interceptors.request.use(onRequestFulfilled, onRequestRejected);
     axiosInstance.interceptors.response.use(onResponseFulfilled, onResponseRejected);
-    */
 
     return {
         axiosInstance,

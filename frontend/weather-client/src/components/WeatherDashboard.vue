@@ -75,6 +75,7 @@ h4 {
   width: 30%;
 }
 .label {
+  font-size: smaller;
   font-weight: bold;
   display: flex;
   justify-content: flex-end;
