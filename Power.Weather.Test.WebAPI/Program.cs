@@ -45,6 +45,21 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors(builder =>
+{
+    var allowedOrigins = config["General:AllowedOrigin"] ?? "*";
+    if (allowedOrigins == "*" || app.Environment.IsDevelopment())
+    {
+        builder = builder.SetIsOriginAllowed(origin => true); // allow any origin
+    }
+    else
+    {
+        builder = builder.WithOrigins(allowedOrigins.Split(';'));
+    }
+
+    builder.AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+});
+
 app.UseAuthorization();
 
 app.MapControllers();

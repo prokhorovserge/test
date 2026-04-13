@@ -80,7 +80,7 @@ public class WeatherDataService : IWeatherDataService
         }
     }
 
-    public static JObject ParseJson(Stream stream)
+    private static JObject ParseJson(Stream stream)
     {
         try
         {
@@ -98,7 +98,7 @@ public class WeatherDataService : IWeatherDataService
         }
     }
 
-    public static WeatherItem GetWeatherItem(JToken json, string dateKey = "time")
+    private static WeatherItem GetWeatherItem(JToken json, string dateKey = "time")
     {
         try
         {
@@ -110,7 +110,7 @@ public class WeatherDataService : IWeatherDataService
                 Condition = condition["text"]?.ToString() ?? throw new Exception(StringResources.WeatherJsonError),
                 ConditionIcon = condition["icon"]?.ToString() ?? throw new Exception(StringResources.WeatherJsonError),
                 WindSpeed = json["wind_kph"]?.ToObject<double>() ?? throw new Exception(StringResources.WeatherJsonError),
-                Pressure = json["precip_mm"]?.ToObject<double>() ?? throw new Exception(StringResources.WeatherJsonError),
+                Pressure = ConvertMbarToMmhh(json["pressure_mb"]?.ToObject<double>() ?? throw new Exception(StringResources.WeatherJsonError)),
                 Humidity = json["humidity"]?.ToObject<double>() ?? throw new Exception(StringResources.WeatherJsonError),
             };
         }
@@ -119,7 +119,7 @@ public class WeatherDataService : IWeatherDataService
             throw new Exception(StringResources.WeatherApiError, ex);
         }
     }
-    public static WeatherForecastDay GetForecastDay(JToken json)
+    private static WeatherForecastDay GetForecastDay(JToken json)
     {
         try
         {
@@ -132,7 +132,7 @@ public class WeatherDataService : IWeatherDataService
                 Condition = condition["text"]?.ToString() ?? throw new Exception(StringResources.WeatherJsonError),
                 ConditionIcon = condition["icon"]?.ToString() ?? throw new Exception(StringResources.WeatherJsonError),
                 WindSpeed = day["maxwind_kph"]?.ToObject<double>() ?? throw new Exception(StringResources.WeatherJsonError),
-                Pressure = day["totalprecip_mm"]?.ToObject<double>() ?? throw new Exception(StringResources.WeatherJsonError),
+                Pressure = ConvertMbarToMmhh(day["pressure_mb"]?.ToObject<double>()), // pressure is not provided in forecast day, so we set it to 0
                 Humidity = day["avghumidity"]?.ToObject<double>() ?? throw new Exception(StringResources.WeatherJsonError),
             };
 
@@ -153,7 +153,7 @@ public class WeatherDataService : IWeatherDataService
         }
     }
 
-    public static WeatherForecastDay[] GetForecastWeatherItems(JObject json)
+    private static WeatherForecastDay[] GetForecastWeatherItems(JObject json)
     {
         var result = new List<WeatherForecastDay>();
         try
@@ -170,5 +170,10 @@ public class WeatherDataService : IWeatherDataService
             throw new Exception(StringResources.WeatherApiError, ex);
         }
         return result.ToArray();
+    }
+
+    private static double ConvertMbarToMmhh(double? mmhg)
+    {
+        return Math.Ceiling((mmhg ?? 0) / 1.333);
     }
 }

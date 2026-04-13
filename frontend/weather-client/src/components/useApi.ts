@@ -9,6 +9,7 @@ export const useApi = () => {
         timeout: 1000,
         headers: {
             'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
         },
     }
 
@@ -17,6 +18,7 @@ export const useApi = () => {
 
     const axiosInstance: AxiosInstance = axios.create(config)
 
+    /*
     const onRequestFulfilled = (config: InternalAxiosRequestConfig) => {
         loading.value = true
         error.value = null
@@ -43,10 +45,11 @@ export const useApi = () => {
 
     axiosInstance.interceptors.request.use(onRequestFulfilled, onRequestRejected);
     axiosInstance.interceptors.response.use(onResponseFulfilled, onResponseRejected);
+    */
 
-  return {
-      axiosInstance,
-      loading,
-      error,
-  }
+    return {
+        axiosInstance,
+        loading,
+        error,
+    }
 }

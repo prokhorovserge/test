@@ -47,7 +47,7 @@ public class WeatherDataServiceTest: BaseTest
         Assert.Equal("Partly cloudy", result.Condition);
         Assert.Equal("//cdn.weatherapi.com/weather/64x64/day/116.png", result.ConditionIcon);
         Assert.Equal(24.8, Math.Round(result.WindSpeed, 1));
-        Assert.Equal(0.03, Math.Round(result.Pressure, 2));
+        Assert.Equal(760, Math.Round(result.Pressure, 2));
         Assert.Equal(87, Math.Round(result.Humidity, 1));
     }
 
@@ -73,7 +73,7 @@ public class WeatherDataServiceTest: BaseTest
         Assert.Equal("Partly cloudy", current.Condition);
         Assert.Equal("//cdn.weatherapi.com/weather/64x64/day/116.png", current.ConditionIcon);
         Assert.Equal(24.8, Math.Round(current.WindSpeed, 1));
-        Assert.Equal(0.03, Math.Round(current.Pressure, 2));
+        Assert.Equal(760, Math.Round(current.Pressure, 2));
         Assert.Equal(87, Math.Round(current.Humidity, 1));
 
         var days = result.Days;
@@ -87,7 +87,7 @@ public class WeatherDataServiceTest: BaseTest
         Assert.Equal("Patchy rain nearby", day.Condition);
         Assert.Equal("//cdn.weatherapi.com/weather/64x64/day/176.png", day.ConditionIcon);
         Assert.Equal(26.6, Math.Round(day.WindSpeed, 1));
-        Assert.Equal(1.55, Math.Round(day.Pressure, 2));
+        Assert.Equal(0, Math.Round(day.Pressure, 2));
         Assert.Equal(80, Math.Round(day.Humidity, 1));
 
         var hours = day.Hours;
@@ -101,7 +101,7 @@ public class WeatherDataServiceTest: BaseTest
         Assert.Equal("Overcast", hour.Condition);
         Assert.Equal("//cdn.weatherapi.com/weather/64x64/night/122.png", hour.ConditionIcon);
         Assert.Equal(23.0, Math.Round(hour.WindSpeed, 1));
-        Assert.Equal(0.00, Math.Round(hour.Pressure, 2));
+        Assert.Equal(762, Math.Round(hour.Pressure, 2));
         Assert.Equal(72, Math.Round(hour.Humidity, 1));
     }
 

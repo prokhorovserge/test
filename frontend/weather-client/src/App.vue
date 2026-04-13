@@ -1,17 +1,17 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <WeatherDashboard msg="Welcome to Your Vue.js App"/>
+  <WeatherDashboard />
 </template>
 
-<script>
+<script lang="ts">
+import { Options, Vue } from 'vue-class-component';
 import WeatherDashboard from './components/WeatherDashboard.vue'
 
-export default {
-  name: 'App',
+@Options({
   components: {
     WeatherDashboard
-  }
-}
+  },
+})
+export default class App extends Vue {}
 </script>
 
 <style>
