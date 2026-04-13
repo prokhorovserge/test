@@ -61,10 +61,12 @@ public class WeatherDataService : IWeatherDataService
                 using var content = response.Content;
                 using var contentStream = await content.ReadAsStreamAsync(cancellationToken);
                 var json = ParseJson(contentStream);
+                var location = json["location"] ?? throw new Exception(StringResources.WeatherJsonError);
                 var current = json["current"] ?? throw new Exception(StringResources.WeatherJsonError);
 
                 return new WeatherForecast
                 {
+                    Location = GetLocation(location),
                     Current = GetWeatherItem(current, "last_updated"),
                     Days = GetForecastWeatherItems(json),
                 };
@@ -98,6 +100,23 @@ public class WeatherDataService : IWeatherDataService
         }
     }
 
+    private static Location GetLocation(JToken json)
+    {
+        try
+        {
+            return new Location
+            {
+                Name = json["name"]?.ToString() ?? throw new Exception(StringResources.WeatherJsonError),
+                Region = json["region"]?.ToString() ?? throw new Exception(StringResources.WeatherJsonError),
+                Country = json["country"]?.ToString() ?? throw new Exception(StringResources.WeatherJsonError),
+            };
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(StringResources.WeatherApiError, ex);
+        }
+    }
+
     private static WeatherItem GetWeatherItem(JToken json, string dateKey = "time")
     {
         try
@@ -119,6 +138,7 @@ public class WeatherDataService : IWeatherDataService
             throw new Exception(StringResources.WeatherApiError, ex);
         }
     }
+
     private static WeatherForecastDay GetForecastDay(JToken json)
     {
         try

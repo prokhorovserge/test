@@ -10,6 +10,7 @@ public class GetWeatherForecastHandlerTests: BaseTest
     private const int expectedDays = 3;
     private const double expectedLat = 12.34;
     private const double expectedLon = 56.78;
+    private readonly Location _location;
     private readonly WeatherItem _weatherItem;
     private readonly WeatherForecast _weatherForecast;
     private readonly GetWeatherForecastQuery _query;
@@ -18,6 +19,22 @@ public class GetWeatherForecastHandlerTests: BaseTest
 
     public GetWeatherForecastHandlerTests()
     {
+        _location = new Location
+        {
+            Name = "Москва",
+            Region = "Moscow City",
+            Country = "Russia"
+        };
+        _weatherItem = new WeatherItem
+        {
+            Date = "2026-04-12 12:00",
+            Temperature = 20.5,
+            Condition = "Sunny",
+            ConditionIcon = "/icon.png",
+            WindSpeed = 10.0,
+            Pressure = 1013.0,
+            Humidity = 50,
+        };
         _weatherItem = new WeatherItem
         {
             Date = "2026-04-12 12:00",
@@ -30,6 +47,7 @@ public class GetWeatherForecastHandlerTests: BaseTest
         };
         _weatherForecast = new WeatherForecast
         {
+            Location = _location,
             Current = _weatherItem,
             Days =
             [
@@ -71,8 +89,12 @@ public class GetWeatherForecastHandlerTests: BaseTest
 
         // Assert
         Assert.NotNull(result);
-        Assert.NotNull(result.Weather);
-        var current = result.Weather.Current;
+        Assert.NotNull(result.Forecast);
+        var location = result.Forecast.Location;
+        Assert.Equal(_location.Name, location.Name);
+        Assert.Equal(_location.Region, location.Region);
+        Assert.Equal(_location.Country, location.Country);
+        var current = result.Forecast.Current;
         Assert.Equal(_weatherItem.Date, current.Date);
         Assert.Equal(_weatherItem.Temperature, current.Temperature);
         Assert.Equal(_weatherItem.Condition, current.Condition);

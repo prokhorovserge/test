@@ -6,5 +6,5 @@ namespace Power.Weather.Test.Application.Handlers.GetWeatherForecast;
 public class GetWeatherForecastResult
 {
     [JsonProperty(Required = Required.Always)]
-    public WeatherForecast Weather { get; set; } = null!;
+    public WeatherForecast Forecast { get; set; } = null!;
 }

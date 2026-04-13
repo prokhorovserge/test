@@ -66,6 +66,12 @@ public class WeatherDataServiceTest: BaseTest
         var result = await _weatherDataService.GetWeatherForecastAsync(param, CancellationToken.None);
         Assert.NotNull(result);
 
+        var location = result.Location;
+        Assert.NotNull(location);
+        Assert.Equal("Москва", location.Name);
+        Assert.Equal("Moscow City", location.Region);
+        Assert.Equal("Russia", location.Country);
+
         var current = result.Current;
         Assert.NotNull(current);
         Assert.Equal("2026-04-10 17:30", current.Date);

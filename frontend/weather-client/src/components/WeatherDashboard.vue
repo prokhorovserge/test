@@ -1,35 +1,43 @@
 <template>
-  <div class="container">
-    <h1>Прогноз погоды</h1>
-    <h2>для {{ latitude }}, {{ longitude }}</h2>
-    <h3>Текущий {{ current?.date }} <img :src="current?.conditionIcon" class="condition" /></h3>
-    <div class="grid">
-      <div class="label">Температура:</div><div class="value">{{ current?.temperature }}°C</div>
-      <div class="label">Состояние:</div><div class="value">{{ current?.condition }}</div>
-      <div class="label">Ветер:</div><div class="value">{{ current?.windSpeed }} км/ч</div>
-      <div class="label">Давление:</div><div class="value">{{ current?.pressure }} мм рт. ст.</div>
-    </div>
-
-    <h3>Почасовой</h3>
-    <div v-for="(hour, index) in hours" :key="index">
-      <h4 class="hour">{{ hour.date }} <img :src="hour.conditionIcon" class="condition" /></h4>
-      <div class="grid">
-        <div class="label">Температура:</div><div class="value">{{ hour.temperature }}°C</div>
-        <div class="label">Состояние:</div><div class="value">{{ hour.condition }}</div>
-        <div class="label">Ветер:</div><div class="value">{{ hour.windSpeed }} км/ч</div>
-        <div class="label">Давление:</div><div class="value">{{ hour.pressure }} мм рт. ст.</div>
+  <div>
+      <!--
+      <div v-if="hasError">
+        <h3>Произошла ошибка при загрузке данных о погоде.</h3>
+        <input type="button" value="Повторить запрос" @click="getData" />
       </div>
-    </div>
+      -->
+      <div class="container">
+        <h1>Прогноз погоды</h1>
+        <h2>для {{ location?.name }}</h2>
+        <h3>Текущий {{ current?.date }} <img :src="current?.conditionIcon" class="condition" /></h3>
+        <div class="grid">
+          <div class="label">Температура:</div><div class="value">{{ current?.temperature }}°C</div>
+          <div class="label">Состояние:</div><div class="value">{{ current?.condition }}</div>
+          <div class="label">Ветер:</div><div class="value">{{ current?.windSpeed }} км/ч</div>
+          <div class="label">Давление:</div><div class="value">{{ current?.pressure }} мм рт. ст.</div>
+        </div>
 
-    <h3>Прогноз на {{ days }} дня</h3>
-    <div v-for="(day, index) in forecastData?.weather.days" :key="index">
-      <h4>{{ day.date }} <img :src="day.conditionIcon" class="condition" /></h4>
-      <div class="grid">
-        <div class="label">Температура:</div><div class="value">{{ day.temperature }}°C</div>
-        <div class="label">Состояние:</div><div class="value">{{ day.condition }}</div>
-        <div class="label">Ветер:</div><div class="value">{{ day.windSpeed }} км/ч</div>
+        <h3>Почасовой</h3>
+        <div v-for="(hour, index) in hours" :key="index">
+          <h4 class="hour">{{ hour.date }} <img :src="hour.conditionIcon" class="condition" /></h4>
+          <div class="grid">
+            <div class="label">Температура:</div><div class="value">{{ hour.temperature }}°C</div>
+            <div class="label">Состояние:</div><div class="value">{{ hour.condition }}</div>
+            <div class="label">Ветер:</div><div class="value">{{ hour.windSpeed }} км/ч</div>
+            <div class="label">Давление:</div><div class="value">{{ hour.pressure }} мм рт. ст.</div>
+          </div>
+        </div>
+
+        <h3>Прогноз на {{ days }} дня</h3>
+        <div v-for="(day, index) in forecastData?.forecast.days" :key="index">
+          <h4>{{ day.date }} <img :src="day.conditionIcon" class="condition" /></h4>
+          <div class="grid">
+            <div class="label">Температура:</div><div class="value">{{ day.temperature }}°C</div>
+            <div class="label">Состояние:</div><div class="value">{{ day.condition }}</div>
+            <div class="label">Ветер:</div><div class="value">{{ day.windSpeed }} км/ч</div>
+          </div>
+        </div>
       </div>
-    </div>
   </div>
 </template>
 
@@ -40,11 +48,11 @@ import { useWeatherApi } from './useWeatherApi'
 const {
     getForecast,
     // forecastLoading,
-    // forecastError
+    // forecastError,
     forecastData,
 } = useWeatherApi()
 
-const latitude = 37.6235989
+const latitude = 55.7482715
 const longitude = 37.6235989
 const days= 3
 const forecastParams = {
@@ -56,11 +64,14 @@ const forecastParams = {
 const getData = () => getForecast(forecastParams)
 
 getData()
-const current = computed(() => forecastData.value?.weather.current)
+
+const location = computed(() => forecastData.value?.forecast.location)
+
+const current = computed(() => forecastData.value?.forecast.current)
 
 const hours = computed(() => {
     const now = Date.now();
-    const today = (forecastData.value?.weather.days[0].hours ?? [])
+    const today = (forecastData.value?.forecast.days[0].hours ?? [])
         .map(item => {
             return {
                 date: item.date,
@@ -71,7 +82,7 @@ const hours = computed(() => {
                 pressure: item.pressure
             }
         }).filter(item => Date.parse(item.date) > now)
-    const tomorrow = (forecastData.value?.weather.days[1].hours ?? [])
+    const tomorrow = (forecastData.value?.forecast.days[1].hours ?? [])
         .map(item => {
             return {
                 date: item.date,
@@ -86,7 +97,7 @@ const hours = computed(() => {
     return res
 })
 
-
+// const hasError = computed(() => forecastError.value !== null)
 </script>
 
 <style scoped>

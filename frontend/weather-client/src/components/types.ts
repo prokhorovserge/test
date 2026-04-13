@@ -1,3 +1,9 @@
+export type Location = {
+    name: string
+    region: string
+    country: string
+}
+
 export type WeatherItem = {
     date: string
     temperature: number
@@ -21,6 +27,7 @@ export type WeatherForecastDay = {
 }
 
 export type WeatherForecast = {
+    location: Location
     current: WeatherItem
     days: WeatherForecastDay[]
 }
@@ -41,5 +48,5 @@ export type GetWeatherForecastQuery = {
 }
 
 export type GetWeatherForecastResult = {
-    weather: WeatherForecast
+    forecast: WeatherForecast
 }

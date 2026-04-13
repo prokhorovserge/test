@@ -24,7 +24,7 @@ public class GetWeatherForecastHandler: BaseEventHandler<GetWeatherForecastQuery
             cancellationToken);
         var result = new GetWeatherForecastResult
         {
-            Weather = weatherData
+            Forecast = weatherData
         };
         return result;
     }

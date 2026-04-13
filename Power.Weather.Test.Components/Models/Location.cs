@@ -2,14 +2,14 @@ using Newtonsoft.Json;
 
 namespace Power.Weather.Test.Components.Models;
 
-public class WeatherForecast
+public class Location
 {
     [JsonProperty(Required = Required.Always)]
-    public Location Location { get; set; } = null!;
+    public string Name { get; set; } = string.Empty;
 
     [JsonProperty(Required = Required.Always)]
-    public WeatherItem Current { get; set; } = null!;
+    public string Region { get; set; } = string.Empty;
 
     [JsonProperty(Required = Required.Always)]
-    public WeatherForecastDay[] Days { get; set; } = null!;
+    public string Country { get; set; } = string.Empty;
 }
