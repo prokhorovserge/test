@@ -1,5 +1,6 @@
 ﻿using Moq;
 using Power.Weather.Test.Application.Handlers.GetWeatherForecast;
+using Power.Weather.Test.Application.Handlers.GetWeatherForecast;
 using Power.Weather.Test.Components.Contracts;
 using Power.Weather.Test.Components.Models;
 
@@ -122,5 +123,90 @@ public class GetWeatherForecastHandlerTests: BaseTest
         };
 
         await Assert.ThrowsAsync<Exception>(() => handler.Handle(query, CancellationToken.None));
+    }
+
+    [Theory]
+    [InlineData(-80)]
+    [InlineData(80)]
+    public void Validate_Latitude_Success(double value)
+    {
+        var query = new GetWeatherForecastQuery { Latitude = value, Longitude = 45, Days = 1 };
+
+        var validator = new GetWeatherForecastQueryValidator();
+        var result = validator.Validate(query);
+
+        Assert.True(result.IsValid);
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(180)]
+    public void Validate_Longitude_Success(double value)
+    {
+        var query = new GetWeatherForecastQuery { Latitude = 45, Longitude = value, Days = 1 };
+
+        var validator = new GetWeatherForecastQueryValidator();
+        var result = validator.Validate(query);
+
+        Assert.True(result.IsValid);
+    }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    public void Validate_Days_Success(int value)
+    {
+        var query = new GetWeatherForecastQuery { Latitude = 45, Longitude = 45, Days = value };
+
+        var validator = new GetWeatherForecastQueryValidator();
+        var result = validator.Validate(query);
+
+        Assert.True(result.IsValid);
+    }
+
+    [Theory]
+    [InlineData(-80.00001, "GreaterThanOrEqualValidator", "'Latitude' must be greater than or equal to '-80'.")]
+    [InlineData(80.00001, "LessThanOrEqualValidator", "'Latitude' must be less than or equal to '80'.")]
+    public void Validate_Latitude_OutOfRange(double value, string errorCode, string error)
+    {
+        var query = new GetWeatherForecastQuery { Latitude = value, Longitude = 45, Days = 1 };
+
+        var validator = new GetWeatherForecastQueryValidator();
+        var result = validator.Validate(query);
+
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, e => e.ErrorCode == errorCode);
+        Assert.Contains(result.Errors, e => e.ErrorMessage == error);
+    }
+
+    [Theory]
+    [InlineData(-0.00001, "GreaterThanOrEqualValidator", "'Longitude' must be greater than or equal to '0'.")]
+    [InlineData(180.00001, "LessThanOrEqualValidator", "'Longitude' must be less than or equal to '180'.")]
+    public void Validate_Longitude_OutOfRange(double value, string errorCode, string error)
+    {
+        var query = new GetWeatherForecastQuery { Latitude = 45, Longitude = value, Days = 1 };
+
+        var validator = new GetWeatherForecastQueryValidator();
+        var result = validator.Validate(query);
+
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, e => e.ErrorCode == errorCode);
+        Assert.Contains(result.Errors, e => e.ErrorMessage == error);
+    }
+
+    [Theory]
+    [InlineData(0, "GreaterThanOrEqualValidator", "'Days' must be greater than or equal to '1'.")]
+    [InlineData(4, "LessThanOrEqualValidator", "'Days' must be less than or equal to '3'.")]
+    public void Validate_Days_OutOfRange(int value, string errorCode, string error)
+    {
+        var query = new GetWeatherForecastQuery { Latitude = 45, Longitude = 45, Days = value };
+
+        var validator = new GetWeatherForecastQueryValidator();
+        var result = validator.Validate(query);
+
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, e => e.ErrorCode == errorCode);
+        Assert.Contains(result.Errors, e => e.ErrorMessage == error);
     }
 }

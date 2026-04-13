@@ -75,4 +75,60 @@ public class GetCurrentWeatherHandlerTests: BaseTest
 
         await Assert.ThrowsAsync<Exception>(() => handler.Handle(query, CancellationToken.None));
     }
+
+    [Theory]
+    [InlineData(-80)]
+    [InlineData(80)]
+    public void Validate_Latitude_Success(double value)
+    {
+        var query = new GetCurrentWeatherQuery { Latitude = value, Longitude = 45 };
+
+        var validator = new GetCurrentWeatherQueryValidator();
+        var result = validator.Validate(query);
+
+        Assert.True(result.IsValid);
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(180)]
+    public void Validate_Longitude_Success(double value)
+    {
+        var query = new GetCurrentWeatherQuery { Latitude = 45, Longitude = value };
+
+        var validator = new GetCurrentWeatherQueryValidator();
+        var result = validator.Validate(query);
+
+        Assert.True(result.IsValid);
+    }
+
+    [Theory]
+    [InlineData(-80.00001, "GreaterThanOrEqualValidator", "'Latitude' must be greater than or equal to '-80'.")]
+    [InlineData(80.00001, "LessThanOrEqualValidator", "'Latitude' must be less than or equal to '80'.")]
+    public void Validate_Latitude_OutOfRange(double value, string errorCode, string error)
+    {
+        var query = new GetCurrentWeatherQuery { Latitude = value, Longitude = 45 };
+
+        var validator = new GetCurrentWeatherQueryValidator();
+        var result = validator.Validate(query);
+
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, e => e.ErrorCode == errorCode);
+        Assert.Contains(result.Errors, e => e.ErrorMessage == error);
+    }
+
+    [Theory]
+    [InlineData(-0.00001, "GreaterThanOrEqualValidator", "'Longitude' must be greater than or equal to '0'.")]
+    [InlineData(180.00001, "LessThanOrEqualValidator", "'Longitude' must be less than or equal to '180'.")]
+    public void Validate_Longitude_OutOfRange(double value, string errorCode, string error)
+    {
+        var query = new GetCurrentWeatherQuery { Latitude = 45, Longitude = value };
+
+        var validator = new GetCurrentWeatherQueryValidator();
+        var result = validator.Validate(query);
+
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, e => e.ErrorCode == errorCode);
+        Assert.Contains(result.Errors, e => e.ErrorMessage == error);
+    }
 }
